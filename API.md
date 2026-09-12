@@ -49,15 +49,19 @@
 | Method | Route | Notes |
 |---|---|---|
 | POST | `/ideas` | Create idea |
-| GET | `/ideas/:id` | **Public.** Idea page (README, owner, tags, rating, member/activity summary) |
+| GET | `/ideas/:id` | **Public.** Idea page (README, owner, tags, rating, member/activity summary, looking-for list). `invite_token` is included only in the owner's view. |
 | PATCH | `/ideas/:id` | Update idea (owner only) |
-| DELETE | `/ideas/:id` | Owner only, before any real activity — confirm if allowed at all |
+| DELETE | `/ideas/:id` | Owner only — deletes idea and cascades (group, members, messages, join requests) |
 | POST | `/ideas/:id/close` | Owner marks idea as closed |
-| POST | `/ideas/:id/fork` | Any contributor forks idea → creates new idea with `forked_from_id` set |
-| GET | `/ideas/:id/forks` | **Public.** List ideas forked from this one |
+| POST | `/ideas/:id/fork` | Any authenticated user forks idea they can view → creates new idea with `forked_from_id` set, `community_id` copied from source |
+| GET | `/ideas/:id/forks` | **Public.** Returns fork count only (`{ count: number }`), not a list — avoids clutter when many people fork the same idea |
 | POST | `/ideas/:id/request-join` | Spectator requests access (type: open+open only) |
-| POST | `/ideas/:id/looking-for` | Owner adds a skill to "Looking for" list |
+| GET | `/ideas/:id/join-requests?cursor=&limit=` | Owner only — lists join requests. Cursor-paginated on `created_at`, descending. Default `limit=50`. Response includes `nextCursor`. |
+| PATCH | `/ideas/:id/join-requests/:requestId` | Owner only — accept/reject a join request |
+| POST | `/ideas/:id/looking-for` | Owner adds a skill to "Looking for" list (body `{ skillId }`, rejects duplicates) |
 | DELETE | `/ideas/:id/looking-for/:skillId` | Owner removes it |
+| POST | `/ideas/:id/regenerate-invite` | Owner invalidates the old invite token and generates a new one |
+| POST | `/ideas/join-via-invite/:token` | Auth required. Joins an open_closed, open idea directly via shareable invite token |
 | POST | `/ideas/:id/save` | Save idea to user's saved list |
 | DELETE | `/ideas/:id/save` | Unsave |
 
@@ -80,10 +84,10 @@
 | Method | Route | Notes |
 |---|---|---|
 | GET | `/groups/:id` | Contributors only — group page data |
-| GET | `/groups/:id/members` | Contributors only |
+| GET | `/groups/:id/members?cursor=&limit=` | Contributors only. Cursor-paginated on `joined_at`, descending. Default `limit=50`. Response includes `nextCursor`. |
 | POST | `/groups/:id/members` | Owner adds a member |
 | DELETE | `/groups/:id/members/:userId` | Owner removes a member (sets `left_at`) |
-| GET | `/groups/:id/messages` | Contributors only, paginated chat history |
+| GET | `/groups/:id/messages?cursor=&limit=` | Contributors only. Cursor-based pagination on `created_at`, descending (most recent first). Default `limit=50`. Response includes `nextCursor` for loading older messages. |
 | — | Socket.IO channel `/groups/:id` | Real-time message send/receive, not REST |
 
 ---

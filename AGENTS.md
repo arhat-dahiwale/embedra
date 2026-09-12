@@ -13,8 +13,8 @@ Embedra is an NLP-powered idea formation platform. Users share, discuss, and ref
 - ORM: Drizzle
 - Real-time: Socket.IO
 - Auth: Custom JWT + bcrypt (no third-party auth provider)
-- Email/OTP: Resend
-- File storage: Cloudflare R2
+- Email/OTP: Resend (free tier)
+- File storage: Supabase Storage (free tier)
 - Validation: Zod (shared between frontend and backend)
 - Queue/Cache: Redis (Upstash) + BullMQ for async jobs
 - NLP: Separate Python FastAPI service, pretrained/zero-shot models only, CPU-only, no fine-tuning, no paid LLM APIs
@@ -63,6 +63,7 @@ embedra/
 10. **Community bans are scoped to one community only, never platform-wide.**
 11. **Owner cannot rate their own idea. Ratings require tenure and freeze on exit.**
 12. **Contribution log entries default to `pending` and require owner approval before becoming publicly visible.**
+13. **All list/chat endpoints must be paginated (cursor-based), never return unbounded result sets.** Applies to group_messages, idea_comments, feed, and any future list endpoint.
 
 ## Coding Conventions
 - TypeScript everywhere in `apps/web` and `apps/api`.

@@ -29,7 +29,22 @@ Real-time chat, image uploads. Not visible to spectators.
 One owner per idea = group admin (add/remove members). Contributor = simply "is a group member," no earned tiers. Owner cannot rate their own idea.
 
 ### 4.5 Forking
-Any contributor can fork any idea into a new idea they own. Fork stores `forked_from`. Original idea is never modified, deleted, or transferred — this is the only mechanism for handling an abandoned/inactive owner. No voting, no inactivity timers, no succession system.
+Any authenticated user can fork any idea they can view — regardless of access_type 
+(open_open, open_closed, or closed). Closed only means "not open to modification," 
+it does not restrict forking. Forking creates a new, independent idea owned by the 
+forker, with `forked_from_id` pointing to the source idea. The original idea is 
+never modified, deleted, or transferred — this is the only mechanism for handling 
+an abandoned/inactive owner, as well as a general-purpose way for users to remix 
+or repurpose an idea's concept in a different context. No voting, no inactivity 
+timers, no succession system.
+
+The idea page shows a **fork count** only (a number), not a list of who forked it — 
+avoids clutter when many people fork the same idea.
+
+**Community scoping:** a fork inherits the same `community_id` as its source idea. 
+If the original is global (no community), the fork is global too. If the original 
+belongs to a community, the fork is automatically scoped to that same community — 
+visible only to that community's members, preserving the community's purpose.
 
 ### 4.6 No Versioning
 Ideas have no edit history/diffs. Current state only.

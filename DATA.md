@@ -50,6 +50,7 @@
 | status | enum(open, closed) | |
 | embedding | vector | pgvector, for feed/search/dup-detection |
 | forked_from_id | FK ideas, nullable | self-reference, lineage |
+| invite_token | text, nullable, unique | shareable join link for open_closed ideas; generated at creation/regeneration |
 | avg_rating | numeric, nullable | cached, recomputed on rating change/freeze |
 | rating_count | int, default 0 | cached, recomputed on rating change/freeze |
 | created_at | timestamp | |
@@ -194,3 +195,4 @@
 - User N—N Communities (via community_members)
 - Community 1—N community_bans
 - User/Idea/Community 1—N reports (polymorphic via target_type/target_id)
+- Idea 1—N Idea (self-reference, forked_from_id) — also used to compute live fork count via GET /ideas/:id/forks
