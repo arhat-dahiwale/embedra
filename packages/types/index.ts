@@ -190,3 +190,78 @@ export const paginatedMessagesResponseSchema = z.object({
 });
 export type PaginatedMessagesResponse = z.infer<typeof paginatedMessagesResponseSchema>;
 
+// ---------- RATING SCHEMAS ----------
+export const submitRatingSchema = z.object({
+    value: z.number().int("Rating must be an integer").min(1, "Rating must be at least 1").max(5, "Rating must be at most 5"),
+});
+export type SubmitRatingInput = z.infer<typeof submitRatingSchema>;
+
+export const ratingResponseSchema = z.object({
+    ideaId: z.string().uuid(),
+    userId: z.string().uuid(),
+    value: z.number().int().min(1).max(5),
+    updatedAt: z.date().or(z.string()),
+    avgRating: z.number().nullable(),
+    ratingCount: z.number().int(),
+});
+export type RatingResponse = z.infer<typeof ratingResponseSchema>;
+
+export const ideaRatingSummarySchema = z.object({
+    avgRating: z.number().nullable(),
+    ratingCount: z.number().int(),
+});
+export type IdeaRatingSummary = z.infer<typeof ideaRatingSummarySchema>;
+
+// ---------- CONTRIBUTION SCHEMAS ----------
+export const contributionStatusEnumSchema = z.enum(["pending", "approved", "rejected"]);
+
+export const submitContributionSchema = z.object({
+    content: z.string().min(1, "Contribution content cannot be empty"),
+    link: z.string().url("Invalid link URL").optional().nullable(),
+});
+export type SubmitContributionInput = z.infer<typeof submitContributionSchema>;
+
+export const contributionResponseSchema = z.object({
+    id: z.string().uuid(),
+    ideaId: z.string().uuid(),
+    userId: z.string().uuid(),
+    username: z.string().optional(),
+    content: z.string(),
+    link: z.string().nullable().optional(),
+    status: contributionStatusEnumSchema,
+    createdAt: z.date().or(z.string()),
+});
+export type ContributionResponse = z.infer<typeof contributionResponseSchema>;
+
+export const paginatedContributionsResponseSchema = z.object({
+    contributions: z.array(contributionResponseSchema),
+    nextCursor: z.string().nullable(),
+});
+export type PaginatedContributionsResponse = z.infer<typeof paginatedContributionsResponseSchema>;
+
+// ---------- IDEA COMMENT SCHEMAS ----------
+export const createCommentSchema = z.object({
+    content: z.string().min(1, "Comment content cannot be empty"),
+    parentCommentId: z.string().uuid("Invalid parent comment ID").optional().nullable(),
+});
+export type CreateCommentInput = z.infer<typeof createCommentSchema>;
+
+export const commentResponseSchema = z.object({
+    id: z.string().uuid(),
+    ideaId: z.string().uuid(),
+    userId: z.string().uuid(),
+    username: z.string().optional(),
+    profilePicUrl: z.string().nullable().optional(),
+    parentCommentId: z.string().uuid().nullable(),
+    content: z.string(),
+    imageUrl: z.string().nullable().optional(),
+    createdAt: z.date().or(z.string()),
+});
+export type CommentResponse = z.infer<typeof commentResponseSchema>;
+
+export const paginatedCommentsResponseSchema = z.object({
+    comments: z.array(commentResponseSchema),
+    nextCursor: z.string().nullable(),
+});
+export type PaginatedCommentsResponse = z.infer<typeof paginatedCommentsResponseSchema>;
+

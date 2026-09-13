@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { db, users, eq, or } from "../../../packages/db/index";
 
-import { signupSchema, loginSchema } from "../../../packages/types/index";
+import { signupSchema, loginSchema } from "../../../packages/types";
 import { AuthenticatedRequest } from "../middleware/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "embedra_super_secret_jwt_key_2026";

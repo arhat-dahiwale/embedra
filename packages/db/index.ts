@@ -10,4 +10,4 @@ export const pool = new Pool({
 export const db = drizzle(pool, { schema });
 export * from "./schema";
 
-export { eq, or, and, isNull, count, sql, lt, desc, asc } from "drizzle-orm";
+export { eq, or, and, isNull, count, sql, lt, gt, desc, asc, avg } from "drizzle-orm";

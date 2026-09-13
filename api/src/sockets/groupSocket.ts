@@ -5,7 +5,7 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { AuthenticatedUser } from "../middleware/auth";
 import { checkContributorAccess } from "../controllers/groupController";
 import { db, groupMessages, users, eq } from "../../../packages/db/index";
-import { createMessageSchema } from "../../../packages/types/index";
+import { createMessageSchema } from "../../../packages/types";
 
 
 const JWT_SECRET = process.env.JWT_SECRET || "embedra_super_secret_jwt_key_2026";

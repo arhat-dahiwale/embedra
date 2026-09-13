@@ -12,6 +12,19 @@ import {
     regenerateInvite,
     joinViaInvite,
 } from "../controllers/ideaController";
+import {
+    submitRating,
+    getIdeaRating,
+} from "../controllers/ratingController";
+import {
+    submitContribution,
+    getIdeaContributions,
+} from "../controllers/contributionController";
+import {
+    getIdeaComments,
+    addIdeaComment,
+    deleteIdeaComment,
+} from "../controllers/commentController";
 import { authenticateToken, authenticateTokenOptional } from "../middleware/auth";
 
 const router = Router();
@@ -36,5 +49,18 @@ router.delete("/:id/looking-for/:skillId", authenticateToken, removeLookingForSk
 
 // Invite-link routes
 router.post("/:id/regenerate-invite", authenticateToken, regenerateInvite);
+
+// Rating routes
+router.get("/:id/rating", getIdeaRating);
+router.post("/:id/rating", authenticateToken, submitRating);
+
+// Contribution routes (nested under idea)
+router.get("/:id/contributions", authenticateTokenOptional, getIdeaContributions);
+router.post("/:id/contributions", authenticateToken, submitContribution);
+
+// Idea comment routes
+router.get("/:id/comments", getIdeaComments);
+router.post("/:id/comments", authenticateToken, addIdeaComment);
+router.delete("/:id/comments/:commentId", authenticateToken, deleteIdeaComment);
 
 export default router;

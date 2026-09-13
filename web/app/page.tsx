@@ -9,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const res = await fetch("http://localhost:5000/health");
+        const res = await fetch("http://localhost:5000/api/v1/health");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (data.status === "ok") {
@@ -70,7 +70,7 @@ export default function Home() {
             </div>
           </div>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Frontend endpoint request to <code className="text-slate-300 font-mono">http://localhost:5000/health</code>
+            Frontend endpoint request to <code className="text-slate-300 font-mono">http://localhost:5000/api/v1/health</code>
           </p>
         </div>
 

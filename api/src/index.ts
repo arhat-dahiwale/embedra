@@ -9,6 +9,7 @@ import healthRoutes from "./routes/healthRoutes";
 import lookupRoutes from "./routes/lookupRoutes";
 import ideaRoutes from "./routes/ideaRoutes";
 import groupRoutes from "./routes/groupRoutes";
+import contributionRoutes from "./routes/contributionRoutes";
 import { setupSocketIO } from "./sockets/groupSocket";
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1", lookupRoutes);
 app.use("/api/v1/ideas", ideaRoutes);
 app.use("/api/v1/groups", groupRoutes);
+app.use("/api/v1/contributions", contributionRoutes);
 
 server.listen(PORT, () => {
     console.log(`🚀 Embedra API Server running on port ${PORT}`);

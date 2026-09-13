@@ -6,7 +6,7 @@ import {
     updateIdeaSchema,
     processJoinRequestSchema,
     addLookingForSchema,
-} from "../../../packages/types/index";
+} from "../../../packages/types";
 import { AuthenticatedRequest } from "../middleware/auth";
 
 const generateInviteToken = (): string => randomBytes(32).toString("hex");

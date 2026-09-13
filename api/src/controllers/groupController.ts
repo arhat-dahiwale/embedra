@@ -1,7 +1,8 @@
 import { Response } from "express";
 import { db, groups, groupMembers, ideas, users, groupMessages, joinRequests, eq, and, isNull, count, lt, desc } from "../../../packages/db/index";
-import { addMemberSchema } from "../../../packages/types/index";
+import { addMemberSchema } from "../../../packages/types";
 import { AuthenticatedRequest } from "../middleware/auth";
+import { recomputeIdeaRatingCache } from "../services/ratingService";
 
 export const checkContributorAccess = async (groupId: string, userId: string): Promise<boolean> => {
     const [member] = await db
@@ -222,6 +223,9 @@ export const removeMember = async (req: AuthenticatedRequest, res: Response) => 
             .update(groupMembers)
             .set({ leftAt: new Date() })
             .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, targetUserId)));
+
+        // Freeze-on-exit: exclude this user's rating from the cached average
+        await recomputeIdeaRatingCache(idea.id);
 
         return res.status(200).json({ message: "Member removed from group successfully" });
     } catch (err: any) {
