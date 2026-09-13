@@ -29,6 +29,31 @@ export const userResponseSchema = z.object({
 
 export type UserResponse = z.infer<typeof userResponseSchema>;
 
+// ---------- PROFILE SCHEMAS ----------
+export const updateProfileSchema = z.object({
+    bio: z.string().max(2000).nullable().optional(),
+    profilePicUrl: z.string().url("Invalid profile picture URL").nullable().optional(),
+    socials: z.record(z.string(), z.string()).nullable().optional(),
+    projectLinks: z.record(z.string(), z.string()).nullable().optional(),
+});
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+export const addUserSkillSchema = z.object({ skillId: z.string().uuid("Invalid skill ID") });
+export type AddUserSkillInput = z.infer<typeof addUserSkillSchema>;
+
+export const profileSkillSchema = z.object({ id: z.string().uuid(), name: z.string() });
+export const profileResponseSchema = z.object({
+    id: z.string().uuid(), username: z.string(), bio: z.string().nullable(),
+    profilePicUrl: z.string().nullable(), socials: z.unknown().nullable(), projectLinks: z.unknown().nullable(),
+    skills: z.array(profileSkillSchema), followerCount: z.number().int(), followingCount: z.number().int(),
+    openIdeaCount: z.number().int(), closedIdeaCount: z.number().int(), activeGroupCount: z.number().int(),
+});
+export type ProfileResponse = z.infer<typeof profileResponseSchema>;
+
+export const userListItemSchema = z.object({ id: z.string().uuid(), username: z.string(), profilePicUrl: z.string().nullable() });
+export const paginatedUsersResponseSchema = z.object({ users: z.array(userListItemSchema), nextCursor: z.string().nullable() });
+export type PaginatedUsersResponse = z.infer<typeof paginatedUsersResponseSchema>;
+
 export const authResponseSchema = z.object({
     token: z.string(),
     user: userResponseSchema,
@@ -264,4 +289,3 @@ export const paginatedCommentsResponseSchema = z.object({
     nextCursor: z.string().nullable(),
 });
 export type PaginatedCommentsResponse = z.infer<typeof paginatedCommentsResponseSchema>;
-
