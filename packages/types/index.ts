@@ -289,3 +289,8 @@ export const paginatedCommentsResponseSchema = z.object({
     nextCursor: z.string().nullable(),
 });
 export type PaginatedCommentsResponse = z.infer<typeof paginatedCommentsResponseSchema>;
+
+export const imageUploadResponseSchema = z.object({ id: z.string().uuid(), imageUrl: z.string().url() });
+export const forkCountResponseSchema = z.object({ count: z.number().int().nonnegative() });
+export const savedIdeaResponseSchema = z.object({ id: z.string().uuid(), title: z.string(), description: z.string(), domainId: z.string().uuid(), accessType: accessTypeEnumSchema, status: ideaStatusEnumSchema, createdAt: z.date().or(z.string()), savedAt: z.date().or(z.string()) });
+export const paginatedSavedIdeasResponseSchema = z.object({ ideas: z.array(savedIdeaResponseSchema), nextCursor: z.string().nullable() });
