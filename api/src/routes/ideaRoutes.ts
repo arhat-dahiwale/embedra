@@ -11,6 +11,7 @@ import {
     removeLookingForSkill,
     regenerateInvite,
     joinViaInvite,
+    uploadIdeaImage, deleteIdeaImage, forkIdea, getForkCount, saveIdea, unsaveIdea,
 } from "../controllers/ideaController";
 import {
     submitRating,
@@ -26,6 +27,8 @@ import {
     deleteIdeaComment,
 } from "../controllers/commentController";
 import { authenticateToken, authenticateTokenOptional } from "../middleware/auth";
+import multer from "multer";
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 }, fileFilter: (_req,file,cb)=>cb(null,file.mimetype.startsWith("image/")) });
 
 const router = Router();
 
@@ -49,6 +52,12 @@ router.delete("/:id/looking-for/:skillId", authenticateToken, removeLookingForSk
 
 // Invite-link routes
 router.post("/:id/regenerate-invite", authenticateToken, regenerateInvite);
+router.post("/:id/images", authenticateToken, upload.single("image"), uploadIdeaImage);
+router.delete("/:id/images/:imageId", authenticateToken, deleteIdeaImage);
+router.post("/:id/fork", authenticateToken, forkIdea);
+router.get("/:id/forks", getForkCount);
+router.post("/:id/save", authenticateToken, saveIdea);
+router.delete("/:id/save", authenticateToken, unsaveIdea);
 
 // Rating routes
 router.get("/:id/rating", getIdeaRating);
