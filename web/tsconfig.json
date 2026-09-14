@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@embedra/types": ["../packages/types/index.ts"]
     }
   },
   "include": [
